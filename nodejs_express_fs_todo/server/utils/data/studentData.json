@@ -1,0 +1,18 @@
+[
+    {
+        "createdOn": "2023-07-21T17:44:14.265Z",
+        "modifiedOn": null,
+        "id": "17txlL9gEuEEblq",
+        "firstName": "Akshay",
+        "lastName": "Sonwane",
+        "dateOfBirth": "1997-08-05",
+        "gender": "male",
+        "knownLanguages": [
+            "english",
+            "hindi",
+            "marathi"
+        ],
+        "address": "Beed, MH, India",
+        "course": "science"
+    }
+]
