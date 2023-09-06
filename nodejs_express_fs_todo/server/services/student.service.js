@@ -2,7 +2,7 @@
 const fsHelper = require('../helper/functions/fsHelper');
 const uniqueId = require('../helper/functions/uniqueIdHelper')
 
-module.exports = class Studnet {
+module.exports = class Student {
     constructor(userInfo, reqObj) {
         this.createdOn = reqObj && reqObj.createdOn ? reqObj.createdOn : new Date().toISOString();
         this.modifiedOn = null;
@@ -36,7 +36,7 @@ module.exports = class Studnet {
         if (this.id) {
             this.modifiedOn = new Date().toISOString()
             const existingStudnetIndex = data.findIndex(item => item.id === this.id);
-            const newStudnetList = [...data];// data ==> Studnet list
+            const newStudnetList = [...data];// data ==> Student list
             newStudnetList[existingStudnetIndex] = this;
             fsHelper.studentWriteFileData(newStudnetList)
             return this // return created Object

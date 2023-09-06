@@ -3,7 +3,7 @@ const fsHelper = require('../helper/functions/fsHelper');
 const uniqueId = require('../helper/functions/uniqueIdHelper')
 const authHelper = require("../helper/functions/authHelper")
 
-module.exports = class Task {
+module.exports = class Employee {
     constructor(userInfo, reqObj) {
         this.createdBy = userInfo.userId;
         this.createdOn = reqObj && reqObj.createdOn ? reqObj.createdOn : new Date().toISOString();

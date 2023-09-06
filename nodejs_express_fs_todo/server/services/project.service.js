@@ -2,7 +2,7 @@
 const fsHelper = require('../helper/functions/fsHelper');
 const uniqueId = require('../helper/functions/uniqueIdHelper')
 
-module.exports = class Task {
+module.exports = class Project {
     constructor(userInfo, reqObj) {
         this.createdOn = reqObj && reqObj.createdOn ? reqObj.createdOn : new Date().toISOString();
         this.modifiedOn = null;
