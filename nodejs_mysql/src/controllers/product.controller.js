@@ -1,6 +1,6 @@
-// const Project = require("../services/project.service");
+const Product = require("../services/product.service");
 
-exports.postCreateProject = async (req, res, next) => {
+exports.postCreateProduct = async (req, res, next) => {
   try {
     const { title, date, description, technology, library } = req.body;
     const reqObj = { title, date, description, technology, library };
@@ -13,7 +13,7 @@ exports.postCreateProject = async (req, res, next) => {
   }
 };
 
-exports.getRetrieveProjectList = async (req, res, next) => {
+exports.getRetrieveProductList = async (req, res, next) => {
   try {
     await res.status(200).send("resObj");
   } catch (error) {
@@ -23,7 +23,7 @@ exports.getRetrieveProjectList = async (req, res, next) => {
   }
 };
 
-exports.putUpdateProject = async (req, res, next) => {
+exports.putUpdateProduct = async (req, res, next) => {
   try {
     await res.status(200).send("resObj");
   } catch (error) {
@@ -33,7 +33,7 @@ exports.putUpdateProject = async (req, res, next) => {
   }
 };
 
-exports.deleteDeleteProject = async (req, res, next) => {
+exports.deleteDeleteProduct = async (req, res, next) => {
   try {
     let reqId = req.params.id;
     await res
@@ -46,7 +46,7 @@ exports.deleteDeleteProject = async (req, res, next) => {
   }
 };
 
-exports.getRetrieveProjectById = async (req, res, next) => {
+exports.getRetrieveProductById = async (req, res, next) => {
   try {
     let reqId = req.params.id;
     await res.status(200).send("resObj");

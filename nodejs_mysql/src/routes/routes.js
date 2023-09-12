@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 // import from other files----------------------------------------------
-const projectRoutes = require("./project.routes");
+const productRoutes = require("./product.routes");
 
-router.use("/project", projectRoutes);
+router.use("/project", productRoutes);
 
 module.exports = router;
