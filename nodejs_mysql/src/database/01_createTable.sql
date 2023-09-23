@@ -29,7 +29,7 @@ CREATE TABLE employee (
     bloodGroup ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'),
     marriedStatus ENUM('married', 'unmarried'),
     pan VARCHAR(255),
-    aadhaar VARCHAR(255),
+    aadhar VARCHAR(255),
     hiringDate DATETIME,
     joiningDate DATETIME,
     modeOfWork ENUM('home', 'office', 'hybrid'),
