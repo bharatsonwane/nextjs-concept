@@ -1,6 +1,20 @@
 const employee = require("../services/employee.service");
 
 /**
+ * @description get employee details details
+ * @returns employeeDetails
+ */
+exports.getEmployeeDetails = async (req, res, next) => {
+  try {
+    const { employeeId } = req.params;
+    const data = await employee.getEmployeeDetails(employeeId);
+    await res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * @description CREATE EMPLOYEE WITH PERSONAL DETAIL
  * @returns employeeDetails
  */
@@ -29,13 +43,15 @@ exports.updateEmployeePersonalData = async (req, res, next) => {
   }
 };
 
+
 /**
- * @description get employee details details
+ * @description update employee personal details
  * @returns employeeDetails
  */
-exports.getEmployeeDetails = async (req, res, next) => {
+exports.addOrUPdateEmployeeContactData = async (req, res, next) => {
   try {
     const { employeeId } = req.params;
+    await employee.addOrUPdateEmployeeContactData(employeeId, req.body);
     const data = await employee.getEmployeeDetails(employeeId);
     await res.status(200).send(data);
   } catch (error) {

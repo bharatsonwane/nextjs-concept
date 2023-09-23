@@ -11,6 +11,11 @@ router.put(
   employeeController.updateEmployeePersonalData
 ); // employee/1/personal
 
+router.put(
+  "/:employeeId/contact",
+  employeeController.addOrUPdateEmployeeContactData
+);
+
 router.get("/:employeeId", employeeController.getEmployeeDetails); // employee/1
 
 module.exports = router;
