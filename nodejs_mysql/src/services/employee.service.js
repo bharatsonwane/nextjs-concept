@@ -1,8 +1,8 @@
 const db = require("../database/db");
 
 /**
- * 
- * @param {*} employeePersonalData 
+ *
+ * @param {*} employeePersonalData
  * @returns employeeId
  */
 exports.addEmployeePersonalData = async (employeePersonalData) => {
@@ -21,8 +21,10 @@ exports.addEmployeePersonalData = async (employeePersonalData) => {
       aadhar,
     } = employeePersonalData;
 
-    const dobDate = new Date(dob);
-    const formattedDob = dobDate.toISOString().slice(0, 19).replace("T", " ");
+    const formattedDob = new Date(dob)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
 
     const data = await db.execute(
       "INSERT INTO employee (title, firstName, middleName, lastName, maidenName, gender, dob, bloodGroup, marriedStatus, pan, aadhar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -43,14 +45,47 @@ exports.addEmployeePersonalData = async (employeePersonalData) => {
     const [result] = data;
     return result.insertId;
   } catch (error) {
-    next(error);
+    throw error;
   }
 };
 
 exports.updateEmployeePersonalData = async (
   employeeId,
   employeePersonalData
-) => {};
+) => {
+  try {
+    const {
+      title,
+      firstName,
+      middleName,
+      lastName,
+      maidenName,
+      gender,
+      dob,
+      bloodGroup,
+      marriedStatus,
+      pan,
+      aadhar,
+    } = employeePersonalData;
+
+    const formattedDob = new Date(dob)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+
+    const query = `
+    UPDATE employee SET 
+      title = "${title}", firstName= "${firstName}", middleName= "${middleName}", lastName= "${lastName}", maidenName= "${maidenName}", 
+      gender= "${gender}", dob= "${formattedDob}", bloodGroup= "${bloodGroup}", marriedStatus= "${marriedStatus}", 
+      pan= "${pan}", aadhar= "${aadhar} "
+    WHERE id = ${employeeId};`;
+
+    const data = await db.execute(query);
+    return data[0];
+  } catch (error) {
+    throw error;
+  }
+};
 
 exports.getEmployeeDetails = async (employeeId) => {
   try {
@@ -106,7 +141,8 @@ exports.getEmployeeDetails = async (employeeId) => {
       });
     });
 
-
     return newEmployeeData;
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
