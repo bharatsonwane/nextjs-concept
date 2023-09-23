@@ -5,9 +5,9 @@ const pool = mysql.createPool({
   user: 'root',
   password: 'Root@3',
   database: 'productConcept',
-  waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0,
+  // waitForConnections: true,
+  // queueLimit: 0,
   // connectTimeout: 60000
 });
 

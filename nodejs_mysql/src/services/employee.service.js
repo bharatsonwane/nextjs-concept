@@ -157,8 +157,12 @@ exports.addOrUPdateEmployeeContactData = async (
   employeeId,
   employeeContactData
 ) => {
-  const connection = await db.getConnection();
+  let connection;
   try {
+    connection = await db.getConnection();
+    // Start the transaction
+    await connection.beginTransaction();
+
     const { contacts, addresses } = employeeContactData;
 
     // insert/update data in contact table
