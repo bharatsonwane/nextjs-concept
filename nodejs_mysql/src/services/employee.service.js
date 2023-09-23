@@ -170,12 +170,12 @@ exports.addOrUPdateEmployeeContactData = async (
           if (item.id) {
             query = `
             UPDATE contact SET
-              contactType = ${contactType}, value = ${value}
+              contactType = "${contactType}", value = "${value}"
             WHERE id = ${id};
             `;
           } else {
             query = `
-            INSERT INTO contact (contactType, value, employeeId) VALUES (${contactType}, ${value}, ${employeeId});
+            INSERT INTO contact (contactType, value, employeeId) VALUES ("${contactType}", "${value}", ${employeeId});
             `;
           }
           const queryResponse = await connection.query(query);
@@ -187,7 +187,7 @@ exports.addOrUPdateEmployeeContactData = async (
     // insert/update data in address table
     if (addresses?.[0]) {
       await Promise.all(
-        contacts.map(async (item) => {
+        addresses.map(async (item) => {
           const {
             id,
             addressType,
@@ -208,7 +208,7 @@ exports.addOrUPdateEmployeeContactData = async (
             UPDATE address SET
               addressType = "${addressType}", country = "${country}", zipCode = "${zipCode}", 
               state = "${state}", district = "${district}", taluka = "${taluka}", villageCity = "${villageCity}",
-              street = "${street}", landmark = "${landmark}", area = "${area}", houseNo = "${houseNo}
+              street = "${street}", landmark = "${landmark}", area = "${area}", houseNo = "${houseNo}"
             WHERE id = ${id};
             `;
           } else {
