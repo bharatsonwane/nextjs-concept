@@ -38,25 +38,206 @@
 -- -- store procedure end
 
 -- -- call store procedure start
-SET @jsonData = '[
-    {
-        "name": "designation",
-        "lookups": [
-            { "label": "Developer" },
-            { "label": "Tester" },
-            { "label": "Scrummaster" }
-        ]
-    },
-    {
-        "name": "skillType",
-        "lookups": [
-            { "label": "Technical Skill" },
-            { "label": "Non-Technical Skill" }
-        ]
-    }
+SET @lookupJsonData = '[
+  {
+    "name": "userRole",
+    "lookups": [
+      {
+        "label": "Admin"
+      },
+      {
+        "label": "HR"
+      },
+      {
+        "label": "Manager"
+      },
+      {
+        "label": "Employee"
+      }
+    ]
+  },
+  {
+    "name": "designation",
+    "lookups": [
+      {
+        "label": "Developer"
+      },
+      {
+        "label": "Tester"
+      },
+      {
+        "label": "Scrummaster"
+      }
+    ]
+  },
+  {
+    "name": "skillType",
+    "lookups": [
+      {
+        "label": "Technical Skill"
+      },
+      {
+        "label": "Non-Technical Skill"
+      }
+    ]
+  },
+  {
+    "name": "technicalSkill",
+    "lookups": [
+      {
+        "label": "React"
+      },
+      {
+        "label": "React Native"
+      },
+      {
+        "label": "NodeJS"
+      },
+      {
+        "label": ".Net"
+      },
+      {
+        "label": "Go Lang"
+      },
+      {
+        "label": "Other"
+      }
+    ]
+  },
+  {
+    "name": "nonTechnicalSkill",
+    "lookups": [
+      {
+        "label": "Communication"
+      },
+      {
+        "label": "Time Management"
+      },
+      {
+        "label": "Cooperation"
+      },
+      {
+        "label": "Adaptability"
+      },
+      {
+        "label": "Problem Solving"
+      },
+      {
+        "label": "Storytelling"
+      }
+    ]
+  },
+  {
+    "name": "skillLevel",
+    "lookups": [
+      {
+        "label": "Basic"
+      },
+      {
+        "label": "Medium"
+      },
+      {
+        "label": "Advance"
+      }
+    ]
+  },
+  {
+    "name": "assetType",
+    "lookups": [
+      {
+        "label": "Laptop"
+      },
+      {
+        "label": "Mobile"
+      },
+      {
+        "label": "Tab"
+      },
+      {
+        "label": "Mouse"
+      }
+    ]
+  },
+  {
+    "name": "assetStatus",
+    "lookups": [
+      {
+        "label": "Operational"
+      },
+      {
+        "label": "Operational & Repair Recommended"
+      },
+      {
+        "label": "Repair Required"
+      },
+      {
+        "label": "Abandoned"
+      }
+    ]
+  },
+  {
+    "name": "hobbies",
+    "lookups": [
+      {
+        "label": "Reading books"
+      },
+      {
+        "label": "Blogging"
+      },
+      {
+        "label": "Origami"
+      },
+      {
+        "label": "Repairing"
+      },
+      {
+        "label": "Fermenting"
+      },
+      {
+        "label": "Archery"
+      },
+      {
+        "label": "Yoga"
+      },
+      {
+        "label": "Cooking"
+      },
+      {
+        "label": "Learn a new language"
+      },
+      {
+        "label": "Painting"
+      }
+    ]
+  },
+  {
+    "name": "employeeAllocation",
+    "lookups": [
+      {
+        "label": "Full"
+      },
+      {
+        "label": "Partial"
+      }
+    ]
+  },
+  {
+    "name": "employeeStatusInCompany",
+    "lookups": [
+      {
+        "label": "Probation period"
+      },
+      {
+        "label": "Onborded"
+      },
+      {
+        "label": "Serving notice period"
+      }
+    ]
+  }
 ]';
 
-CALL InsertLookups(@jsonData);
+CALL InsertLookups(@lookupJsonData);
 
 -- -- call store procedure end
 
