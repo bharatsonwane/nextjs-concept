@@ -1,4 +1,5 @@
 const db = require("../database/db");
+const authHelper = require("../helper/authHelper");
 
 exports.getEmployeeDetails = async (employeeId) => {
   try {
@@ -66,7 +67,12 @@ exports.getEmployeeDetails = async (employeeId) => {
  * @returns employeeId
  */
 exports.addEmployeePersonalData = async (employeePersonalData) => {
+  let connection;
   try {
+    connection = await db.getConnection();
+    // Start the transaction
+    await connection.beginTransaction();
+
     const {
       title,
       firstName,
@@ -86,7 +92,8 @@ exports.addEmployeePersonalData = async (employeePersonalData) => {
       .slice(0, 19)
       .replace("T", " ");
 
-    const data = await db.execute(
+    // add data in employee table
+    const employeeInsertResponse = await connection.query(
       "INSERT INTO employee (title, firstName, middleName, lastName, maidenName, gender, dob, bloodGroup, marriedStatus, pan, aadhar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         title,
@@ -102,10 +109,33 @@ exports.addEmployeePersonalData = async (employeePersonalData) => {
         aadhar,
       ]
     );
-    const [result] = data;
-    return result.insertId;
+    const [result] = employeeInsertResponse;
+    const employeeId = result.insertId;
+
+    // add data in user table
+    const username = `${firstName}.${lastName}@etevatech.com`;
+    const hashPassword = await authHelper.hashPassword("Ganesh@33");
+
+    const data = await connection.query(
+      "INSERT INTO user (username, password, status, employeeId) VALUES (?, ?, ?, ?)",
+      [username, hashPassword, "active", employeeId]
+    );
+
+    // Commit the transaction if all queries are successful
+    await connection.commit();
+
+    return employeeId;
   } catch (error) {
+    // Roll back the transaction in case of an error
+    if (connection) {
+      await connection.rollback();
+    }
     throw error;
+  } finally {
+    // Release the connection back to the pool
+    if (connection) {
+      connection.release();
+    }
   }
 };
 
@@ -175,7 +205,7 @@ exports.addOrUPdateEmployeeContactData = async (
             query = `
             UPDATE contact SET
               contactType = "${contactType}", value = "${value}"
-            WHERE id = ${id};
+            WHERE id = ${id} AND employeeId = ${employeeId};
             `;
           } else {
             query = `
@@ -213,7 +243,7 @@ exports.addOrUPdateEmployeeContactData = async (
               addressType = "${addressType}", country = "${country}", zipCode = "${zipCode}", 
               state = "${state}", district = "${district}", taluka = "${taluka}", villageCity = "${villageCity}",
               street = "${street}", landmark = "${landmark}", area = "${area}", houseNo = "${houseNo}"
-            WHERE id = ${id};
+            WHERE id = ${id} AND employeeId = ${employeeId};
             `;
           } else {
             query = `
@@ -221,6 +251,124 @@ exports.addOrUPdateEmployeeContactData = async (
               (addressType, country, zipCode, state, district, taluka, villageCity, street, landmark, area, houseNo, employeeId) 
             VALUES 
               ("${addressType}", "${country}", "${zipCode}", "${state}", "${district}", "${taluka}", "${villageCity}", "${street}", "${landmark}", "${area}", "${houseNo}", ${employeeId});
+            `;
+          }
+          const queryResponse = await connection.query(query);
+          return queryResponse;
+        })
+      );
+    }
+
+    // Commit the transaction if all queries are successful
+    await connection.commit();
+  } catch (error) {
+    // Roll back the transaction in case of an error
+    if (connection) {
+      await connection.rollback();
+    }
+    throw error;
+  } finally {
+    // Release the connection back to the pool
+    if (connection) {
+      connection.release();
+    }
+  }
+};
+
+/**
+ *
+ * @param {*} employeeId
+ * @param {*} employeePersonalData
+ * @returns
+ */
+exports.addOrUPdateEmployeeJobData = async (employeeId, employeeJobData) => {
+  let connection;
+  try {
+    connection = await db.getConnection();
+    // Start the transaction
+    await connection.beginTransaction();
+
+    const { currentJobDetail, experience } = employeeJobData;
+    const {
+      hiringDate,
+      joiningDate,
+      modeOfWork,
+      probationPeriodMonth,
+      // probationCompletionDate,
+      CTC,
+      designationLookupId,
+      userRoleLookupId, // userRoleLookupId in user table
+    } = currentJobDetail;
+
+    const formattedHiringDate = new Date(hiringDate)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+
+    const formattedJoiningDate = new Date(joiningDate)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+
+    // const formattedProbationCompletionDate = new Date(probationCompletionDate)
+    //   .toISOString()
+    //   .slice(0, 19)
+    //   .replace("T", " ");
+
+    // update data personal table for current job details
+    const currentJobDetailQuery = `
+    UPDATE employee SET
+      hiringDate = "${formattedHiringDate}", joiningDate = "${formattedJoiningDate}", modeOfWork = "${modeOfWork}", 
+      probationPeriodMonth = "${probationPeriodMonth}", CTC = "${CTC}", designationLookupId = "${designationLookupId}"
+    WHERE id = ${employeeId};
+    `;
+
+    await connection.query(currentJobDetailQuery);
+
+    // update user role
+    const updateUserRoleQuery = `
+    UPDATE user SET
+      userRoleLookupId = ${userRoleLookupId}
+    WHERE employeeId = ${employeeId};
+    `;
+    await connection.query(updateUserRoleQuery);
+
+    // insert/update data in address table
+    if (experience?.[0]) {
+      await Promise.all(
+        experience.map(async (item) => {
+          const {
+            id,
+            organisationName,
+            startDate,
+            endDate,
+            designationLookupId,
+          } = item;
+
+          const formattedStartDate = new Date(startDate)
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " ");
+
+          const formattedEndDate = new Date(endDate)
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " ");
+
+          let query;
+          if (item.id) {
+            query = `
+            UPDATE experience SET
+              organisationName = "${organisationName}", startDate = "${formattedStartDate}", 
+              endDate = "${formattedEndDate}", designationLookupId = "${designationLookupId}"
+            WHERE id = ${id} AND employeeId = ${employeeId};
+            `;
+          } else {
+            query = `
+            INSERT INTO experience 
+              (organisationName, startDate, endDate, employeeId, designationLookupId) 
+            VALUES 
+              ("${organisationName}", "${formattedStartDate}", "${formattedEndDate}", ${employeeId}, ${designationLookupId});
             `;
           }
           const queryResponse = await connection.query(query);

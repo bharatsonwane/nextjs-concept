@@ -1,4 +1,4 @@
-const baseUrl = require("../helper/config/baseURLconfig");
+const baseUrl = require("../config/baseURLconfig");
 
 const lookupDoc = require("./content/lookup.doc");
 

@@ -11,7 +11,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDoc = require("./src/documentation/swagger");
 
 // import from other files----------------------------------------------
-const baseUrl = require("./src/helper/config/baseURLconfig");
+const baseUrl = require("./src/config/baseURLconfig");
 const routes = require("./src/routes/routes");
 // define constants -----------------------------------------------------
 const app = express();

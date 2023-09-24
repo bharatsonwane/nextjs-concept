@@ -88,6 +88,19 @@ CREATE TABLE address (
     FOREIGN KEY (employeeId) REFERENCES employee(id)
 );
 
+-- experience table
+CREATE TABLE experience (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    organisationName VARCHAR(255) NOT NULL,
+    startDate DATETIME, 
+    endDate DATETIME, 
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    employeeId INT NOT NULL,
+    designationLookupId INT,
+    FOREIGN KEY (employeeId) REFERENCES employee(id),
+    FOREIGN KEY (designationLookupId) REFERENCES lookup(id)
+);
 
 CREATE TABLE bankDetail (
     id INT AUTO_INCREMENT PRIMARY KEY,
