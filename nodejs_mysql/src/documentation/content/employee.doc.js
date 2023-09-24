@@ -129,61 +129,6 @@ exports.definition = {
             },
         }
     },
-    employeeSkillRequest: {
-        required: [
-            "skillName", "skillLevel", "employeeId"
-        ],
-        properties: {
-            skills: {
-                type: "array",
-                items: {
-                    type: "object",
-                    properties: {
-                        id: {
-                            type: "number",
-                            example: "6"
-                        },
-                        notes: {
-                            type: "string",
-                            example: "Skill detail info."
-                        },
-                        skillType: {
-                            type: "number",
-                        },
-                        skillName: {
-                            type: "number",
-                        },
-                        skillLevel: {
-                            type: "number",
-                        },
-                        skillExperienceYear: {
-                            type: "number",
-                        },
-                    }
-                }
-            },
-            hobbiesRecord: {
-                type: "array",
-                items: {
-                    type: "object",
-                    properties: {
-                        id: {
-                            type: "number",
-                            example: 1
-                        },
-                        hobbiesType: {
-                            type: "number",
-                            example: 9
-                        },
-                        hobbiesName: {
-                            type: "number",
-                        },
-                    }
-
-                }
-            },
-        },
-    },
     employeeJobRequest: {
         required: [
             "role", "designation", "hiringDate", "joiningDate", "password"
@@ -255,6 +200,61 @@ exports.definition = {
                 }
             }
         }
+    },
+    employeeSkillRequest: {
+        required: [
+            "skillName", "skillLevel", "employeeId"
+        ],
+        properties: {
+            skills: {
+                type: "array",
+                items: {
+                    type: "object",
+                    properties: {
+                        id: {
+                            type: "number",
+                            example: "6"
+                        },
+                        notes: {
+                            type: "string",
+                            example: "Skill detail info."
+                        },
+                        skillType: {
+                            type: "number",
+                        },
+                        skillName: {
+                            type: "number",
+                        },
+                        skillLevel: {
+                            type: "number",
+                        },
+                        skillExperienceYear: {
+                            type: "number",
+                        },
+                    }
+                }
+            },
+            hobbiesRecord: {
+                type: "array",
+                items: {
+                    type: "object",
+                    properties: {
+                        id: {
+                            type: "number",
+                            example: 1
+                        },
+                        hobbiesType: {
+                            type: "number",
+                            example: 9
+                        },
+                        hobbiesName: {
+                            type: "number",
+                        },
+                    }
+
+                }
+            },
+        },
     },
     employeeBankRequest: {
         required: ["employeeId", "bankName", "branchName", "ifscCode", "micrCode", "accountNumber", "isActive",],
@@ -559,43 +559,7 @@ exports.path = {
         },
     },
 
-
-    "/employee/{employeeId}/skill": {
-        put: {
-            tags: ["Employee"],
-            operationId: "employeeSkill",
-            summary: "Add/update employee skill.",
-            description: "Add/update employee skill detail.",
-            security: [{ JWT: [] }],
-            parameters: [
-                {
-                    "name": "employeeId",
-                    "in": "path",
-                    "required": true,
-                    "type": "string"
-                },
-                {
-                    name: "employeeSkill",
-                    required: true,
-                    in: "body",
-                    type: "object",
-                    description: "Employee information.",
-                    schema: {
-                        "$ref": `#/definitions/employeeSkillRequest`
-                    }
-                }
-            ],
-            responses: {
-                200: {
-                    description: "employee skill detail added/updated successfully.",
-                    // schema: {
-                    //     $ref: "#/definitions/employee"
-                    // }
-                }
-            }
-        },
-    },
-
+    
     "/employee/{employeeId}/job": {
         put: {
             tags: ["Employee"],
@@ -632,6 +596,42 @@ exports.path = {
         },
     },
 
+
+    "/employee/{employeeId}/skill": {
+        put: {
+            tags: ["Employee"],
+            operationId: "employeeSkill",
+            summary: "Add/update employee skill.",
+            description: "Add/update employee skill detail.",
+            security: [{ JWT: [] }],
+            parameters: [
+                {
+                    "name": "employeeId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    name: "employeeSkill",
+                    required: true,
+                    in: "body",
+                    type: "object",
+                    description: "Employee information.",
+                    schema: {
+                        "$ref": `#/definitions/employeeSkillRequest`
+                    }
+                }
+            ],
+            responses: {
+                200: {
+                    description: "employee skill detail added/updated successfully.",
+                    // schema: {
+                    //     $ref: "#/definitions/employee"
+                    // }
+                }
+            }
+        },
+    },
 
     "/employee/{employeeId}/bank": {
         put: {
