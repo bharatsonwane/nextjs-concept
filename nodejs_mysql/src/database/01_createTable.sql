@@ -102,6 +102,39 @@ CREATE TABLE experience (
     FOREIGN KEY (designationLookupId) REFERENCES lookup(id)
 );
 
+-- skill table
+CREATE TABLE skill (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    skillExperienceYear INT ,
+    notes VARCHAR(255),
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    skillType INT NOT NULL,
+    skillName INT NOT NULL,
+    skillLevel INT NOT NULL,
+    employeeId INT NOT NULL,
+    FOREIGN KEY (skillType) REFERENCES lookup(id),
+    FOREIGN KEY (skillName) REFERENCES lookup(id),
+    FOREIGN KEY (skillLevel) REFERENCES lookup(id),
+    FOREIGN KEY (employeeId) REFERENCES employee(id)
+);
+
+
+-- hobbiesRecord table
+CREATE TABLE hobbiesRecord (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    hobbiesType INT,
+    hobbiesName INT,
+    employeeId INT NOT NULL,
+    FOREIGN KEY (hobbiesType) REFERENCES lookup(id),
+    FOREIGN KEY (hobbiesName) REFERENCES lookup(id),
+    FOREIGN KEY (employeeId) REFERENCES employee(id)
+);
+
+
+
 CREATE TABLE bankDetail (
     id INT AUTO_INCREMENT PRIMARY KEY,
     bankName VARCHAR(255) NOT NULL,

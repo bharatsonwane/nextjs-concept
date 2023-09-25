@@ -21,6 +21,11 @@ router.put(
     employeeController.addOrUPdateEmployeeJobData
   );
 
+  router.put(
+    "/:employeeId/skill",
+    employeeController.addOrUPdateEmployeeSkillData
+  );
+
 router.get("/:employeeId", employeeController.getEmployeeDetails); // employee/1
 
 module.exports = router;

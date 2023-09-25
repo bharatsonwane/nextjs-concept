@@ -393,3 +393,95 @@ exports.addOrUPdateEmployeeJobData = async (employeeId, employeeJobData) => {
     }
   }
 };
+
+/**
+ *
+ * @param {*} employeeId
+ * @param {*} employeePersonalData
+ * @returns
+ */
+exports.addOrUPdateEmployeeSkillData = async (
+  employeeId,
+  employeeSkillData
+) => {
+  let connection;
+  try {
+    connection = await db.getConnection();
+    // Start the transaction
+    await connection.beginTransaction();
+
+    const { skills, hobbiesRecord } = employeeSkillData;
+
+    // insert/update data in contact table
+    if (skills?.[0]) {
+      await Promise.all(
+        skills.map(async (item) => {
+          const {
+            id,
+            notes,
+            skillType,
+            skillName,
+            skillLevel,
+            skillExperienceYear,
+          } = item;
+          let query;
+          if (item.id) {
+            query = `
+            UPDATE skill SET
+              notes = "${notes}", skillType = ${skillType}, skillName = ${skillName}
+              skillLevel = ${skillLevel}, skillExperienceYear = ${skillExperienceYear}
+            WHERE id = ${id} AND employeeId = ${employeeId};
+            `;
+          } else {
+            query = `
+            INSERT INTO skill (notes, skillType, skillName, skillLevel, skillExperienceYear, employeeId) 
+            VALUES ("${notes}", ${skillType}, ${skillName}, ${skillLevel}, ${skillExperienceYear}, ${employeeId});
+            `;
+          }
+          const queryResponse = await connection.query(query);
+          return queryResponse;
+        })
+      );
+    }
+
+    // insert/update data in address table
+    if (hobbiesRecord?.[0]) {
+      await Promise.all(
+        hobbiesRecord.map(async (item) => {
+          const { id, hobbiesType, hobbiesName } = item;
+          let query;
+          if (item.id) {
+            query = `
+            UPDATE hobbiesRecord SET
+              hobbiesType = ${hobbiesType}, hobbiesName = ${hobbiesName}
+            WHERE id = ${id} AND employeeId = ${employeeId};
+            `;
+          } else {
+            query = `
+            INSERT INTO address 
+              (hobbiesType, hobbiesName, employeeId) 
+            VALUES 
+              (${hobbiesType}, ${hobbiesName}, ${employeeId});
+            `;
+          }
+          const queryResponse = await connection.query(query);
+          return queryResponse;
+        })
+      );
+    }
+
+    // Commit the transaction if all queries are successful
+    await connection.commit();
+  } catch (error) {
+    // Roll back the transaction in case of an error
+    if (connection) {
+      await connection.rollback();
+    }
+    throw error;
+  } finally {
+    // Release the connection back to the pool
+    if (connection) {
+      connection.release();
+    }
+  }
+};
